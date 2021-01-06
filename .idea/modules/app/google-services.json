@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "345574779646",
+    "project_id": "commune-app-2e17c",
+    "storage_bucket": "commune-app-2e17c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:345574779646:android:be8205df951f995a3d13af",
+        "android_client_info": {
+          "package_name": "com.pragati.communeapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "345574779646-00c0hnd026h4drao8oaal8o34le9si7v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pragati.communeapp",
+            "certificate_hash": "1f0e1cb387ee7d604c9a1d96619558b9c4d49017"
+          }
+        },
+        {
+          "client_id": "345574779646-1hj4eegsqf0lbbes913r73hmr8g61rf5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmQFtHi5nduy9z4tZlijUAVc9TbTXaewk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "345574779646-1hj4eegsqf0lbbes913r73hmr8g61rf5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

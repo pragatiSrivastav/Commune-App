@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<group android:checkableBehavior="single">
+
+    <group>
+        <item
+            android:id="@+id/dashboard"
+            android:title="Dashboard"
+            android:icon="@drawable/ic_dashboard"/>
+        <item
+            android:id="@+id/Class"
+            android:title="Add Class"
+            android:icon="@drawable/ic_class"/>
+
+        <item
+            android:id="@+id/TakeAtt"
+            android:title="Take Attendance"
+            android:icon="@drawable/ic_att"/>
+        <item
+            android:id="@+id/ViewAtt"
+            android:title="View Attendance"
+
+            android:icon="@drawable/ic_eye"/>
+
+    </group>
+
+    <item android:title="App settings">
+
+        <menu>
+
+            <item
+                android:id="@+id/ChangePass"
+                android:title="Change password"
+                android:icon="@drawable/ic_lock"/>
+            <item
+                android:id="@+id/Logout"
+                android:title="Logout"
+                android:icon="@drawable/ic_logout"/>
+
+
+        </menu>
+
+    </item>
+
+
+</group>
+
+
+
+</menu>
