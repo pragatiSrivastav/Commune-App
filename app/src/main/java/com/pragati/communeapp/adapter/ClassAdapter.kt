@@ -7,12 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
-import com.pragati.communeapp.model.ClassItem
 import com.pragati.communeapp.R
 import com.pragati.communeapp.activity.StudentActivity
-import java.util.ArrayList
+import com.pragati.communeapp.model.ClassItem
 
-class ClassAdapter(val context: Context,val itemList: ArrayList<ClassItem>):RecyclerView.Adapter<ClassAdapter.ClassViewHolder>() {
+class ClassAdapter(
+    val context: Context,
+    private val itemList: ArrayList<ClassItem>
+):RecyclerView.Adapter<ClassAdapter.ClassViewHolder>() {
 
     class ClassViewHolder(view : View): RecyclerView.ViewHolder(view){
 

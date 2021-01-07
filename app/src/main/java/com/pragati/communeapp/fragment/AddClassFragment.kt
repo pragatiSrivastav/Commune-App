@@ -1,6 +1,7 @@
 package com.pragati.communeapp.fragment
 
 import android.content.Context
+import android.database.Cursor
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -11,13 +12,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.pragati.communeapp.model.ClassItem
 import com.pragati.communeapp.adapter.ClassAdapter
 import com.pragati.communeapp.R
+import com.pragati.communeapp.database.DbHelper
 
 
 class AddClassFragment : Fragment() {
@@ -25,10 +26,10 @@ class AddClassFragment : Fragment() {
     lateinit var fab:  FloatingActionButton
     lateinit var recView : RecyclerView
     lateinit var layoutManager : RecyclerView.LayoutManager
-    lateinit var classAdapter: ClassAdapter
+    private lateinit var classAdapter: ClassAdapter
     lateinit var classedt : EditText
     lateinit var subjectedt : EditText
-    lateinit var toolbar  : Toolbar
+    lateinit var dbHelper: DbHelper
 
     private val classItems = arrayListOf<ClassItem>()
 
@@ -39,6 +40,8 @@ class AddClassFragment : Fragment() {
         // Inflate the layout for this fragment
         val view= inflater.inflate(R.layout.fragment_add_class, container, false)
 
+        dbHelper = DbHelper(activity as Context)
+
         fab = view.findViewById(R.id.add)
         recView = view.findViewById(R.id.rec_view)
         recView.setHasFixedSize(true)
@@ -47,6 +50,7 @@ class AddClassFragment : Fragment() {
         recView.adapter=classAdapter
         recView.layoutManager=layoutManager
 
+        loadData()
 
         fab.setOnClickListener {
             val builder = AlertDialog.Builder(activity as Context)
@@ -59,6 +63,7 @@ class AddClassFragment : Fragment() {
             classedt = view.findViewById(R.id.et_year)
             subjectedt=view.findViewById(R.id.et_sub)
 
+
             val cancel : Button = view.findViewById(R.id.btn_cancel)
             val add : Button = view.findViewById(R.id.btn_add)
 
@@ -67,24 +72,52 @@ class AddClassFragment : Fragment() {
             }
 
             add.setOnClickListener{
-                addClass()
+                addingClass()
                 dialog.dismiss()
             }
 
         }
+
         return view
     }
 
-    private fun addClass(){
-        val className : String = classedt.text.toString()
-        val subjectName : String = subjectedt.text.toString()
-        classItems.add(
-            ClassItem(
-                className,
-                subjectName
+    private fun loadData(){
+
+        val cursor : Cursor = dbHelper.getClassTable()
+        classItems.clear()
+        while(cursor.moveToNext()){
+            val id : Long = cursor.getLong(cursor.getColumnIndex(dbHelper.cid))
+            val className : String = cursor.getString(cursor.getColumnIndex(dbHelper.classNameKey))
+            val subjectName : String = cursor.getString(cursor.getColumnIndex(dbHelper.subjectNameKey))
+
+            classItems.add(
+                ClassItem(
+                    id,
+                    className,
+                    subjectName
+                )
             )
-        )
-        classAdapter.notifyDataSetChanged()
         }
 
+    }
+
+
+    private fun addingClass(){
+        val className : String = classedt.text.toString()
+        val subjectName : String = subjectedt.text.toString()
+        val cid : Long = dbHelper.addClass(className,subjectName)
+
+        classItems.add(
+            ClassItem(
+                cid,
+                className,
+                subjectName
+            ))
+        classAdapter.notifyDataSetChanged()
+    }
+
+
 }
+
+
+
