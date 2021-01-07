@@ -7,10 +7,12 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -117,6 +119,60 @@ class AddClassFragment : Fragment() {
     }
 
 
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+       when(item.itemId){
+           0->{
+               showUpdateDialog(item.groupId)
+           }
+           1->{
+               deleteClass(item.groupId)
+           }
+       }
+
+        return super.onContextItemSelected(item)
+    }
+
+    private fun showUpdateDialog(pos: Int){
+        val builder = AlertDialog.Builder(activity as Context)
+        val view = layoutInflater.inflate(R.layout.dialog_update_class, null)
+        builder.setView(view)
+        val dialog : AlertDialog = builder.create()
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.show()
+
+        classedt = view.findViewById(R.id.e_year)
+        subjectedt=view.findViewById(R.id.e_sub)
+
+
+        val cancel : Button = view.findViewById(R.id.btn_cancel)
+        val add : Button = view.findViewById(R.id.btn_update)
+
+        add.text = "Update"
+
+        cancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        add.setOnClickListener{
+            val clsName : String = classedt.text.toString()
+            val subName : String = subjectedt.text.toString()
+            updateClass(pos,clsName,subName)
+            dialog.dismiss()
+        }
+    }
+
+    private fun updateClass(pos: Int, clsName: String, subName: String){
+        dbHelper.updateClass(classItems[pos].class_id,clsName,subName)
+        classItems[pos].className=clsName
+        classItems[pos].subjectName=subName
+        classAdapter.notifyItemChanged(pos)
+    }
+
+    private fun deleteClass(pos : Int){
+        dbHelper.deleteClass(classItems[pos].class_id )
+        classItems.removeAt(pos)
+        classAdapter.notifyItemRemoved(pos)
+    }
 }
 
 

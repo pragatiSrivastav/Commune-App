@@ -2,6 +2,7 @@ package com.pragati.communeapp.adapter
 
 import android.content.Context
 import android.content.Intent
+import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,11 +17,23 @@ class ClassAdapter(
     private val itemList: ArrayList<ClassItem>
 ):RecyclerView.Adapter<ClassAdapter.ClassViewHolder>() {
 
-    class ClassViewHolder(view : View): RecyclerView.ViewHolder(view){
+    class ClassViewHolder(view : View): RecyclerView.ViewHolder(view) , View.OnCreateContextMenuListener{
 
         val txtClass : TextView = view.findViewById(R.id.txt_year)
         val txtSubject : TextView = view.findViewById(R.id.txt_sub)
         val llContent : LinearLayout = view.findViewById(R.id.llContent)
+
+        override fun onCreateContextMenu(
+            menu: ContextMenu?,
+            v: View?,
+            menuInfo: ContextMenu.ContextMenuInfo?
+        ) {
+            menu?.add(adapterPosition,0,0,"EDIT")
+            menu?.add(adapterPosition,1,0,"DELETE")
+
+        }
+
+        val longPress = view.setOnCreateContextMenuListener(this)
 
     }
 
@@ -49,5 +62,7 @@ class ClassAdapter(
             intent.putExtra("Subject",subName)
             holder.llContent.context.startActivity(intent)
         }
+
+        holder.longPress
     }
 }
