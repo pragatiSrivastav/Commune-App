@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,13 +22,23 @@ import java.util.ArrayList
 
 class StudentAdapter(val context: Context, val itemList: ArrayList<StudentItem>):RecyclerView.Adapter<StudentAdapter.StudentViewHolder>() {
 
-    class StudentViewHolder(view : View): RecyclerView.ViewHolder(view){
+    class StudentViewHolder(view : View): RecyclerView.ViewHolder(view),View.OnCreateContextMenuListener{
 
         val roll : TextView = view.findViewById(R.id.txt_roll)
         val nameOfStd : TextView = view.findViewById(R.id.txt_name)
         val status : TextView = view.findViewById(R.id.status)
         val rrContent : RelativeLayout = view.findViewById(R.id.rrContent)
         val cardView : CardView = view.findViewById(R.id.cardView)
+        override fun onCreateContextMenu(
+            menu: ContextMenu?,
+            v: View?,
+            menuInfo: ContextMenu.ContextMenuInfo?
+        ) {
+            menu?.add(adapterPosition,0,0,"EDIT")
+            menu?.add(adapterPosition,1,0,"DELETE")
+        }
+
+        val longPress = view.setOnCreateContextMenuListener(this)
 
     }
 
@@ -38,56 +49,55 @@ class StudentAdapter(val context: Context, val itemList: ArrayList<StudentItem>)
 
     override fun getItemCount(): Int {
         return itemList.size
-
     }
 
     override fun onBindViewHolder(holder: StudentViewHolder, position: Int) {
 
         val studentItem = itemList[position]
-        holder.roll.text= studentItem.roll
+        holder.roll.text= studentItem.roll.toString()
         holder.nameOfStd.text=studentItem.name
         holder.status.text = studentItem.status
         var status = holder.status.text
-        holder.rrContent.setOnClickListener {
-
-            if(status == "P"){
-                status = "A"
-            }
-            else{
-                status="P"
-            }
-            studentItem.status= status.toString()
-            notifyDataSetChanged()
-
-            if (status == "P") {
-                holder.cardView.setCardBackgroundColor(
-                    Color.parseColor(
-                        "#" + Integer.toHexString(
-                            ContextCompat.getColor(context, R.color.present)
-                        )
-                    )
-                )
-            } else if (status == "A") {
-                holder.cardView.setCardBackgroundColor(
-                    Color.parseColor(
-                        "#" + Integer.toHexString(
-                            ContextCompat.getColor(context, R.color.absent)
-                        )
-                    )
-                )
-
-            } else {
-                holder.cardView.setCardBackgroundColor(
-                    Color.parseColor(
-                        "#" + Integer.toHexString(
-                            ContextCompat.getColor(context, R.color.normal)
-                        )
-                    )
-                )
-
-
-            }
-        }
+//        holder.rrContent.setOnClickListener {
+//            if(status == "P"){
+//                status = "A"
+//            }
+//            else{
+//                status="P"
+//            }
+//            studentItem.status= status.toString()
+//            notifyDataSetChanged()
+//
+//            if (status == "P") {
+//                holder.cardView.setCardBackgroundColor(
+//                    Color.parseColor(
+//                        "#" + Integer.toHexString(
+//                            ContextCompat.getColor(context, R.color.present)
+//                        )
+//                    )
+//                )
+//            } else if (status == "A") {
+//                holder.cardView.setCardBackgroundColor(
+//                    Color.parseColor(
+//                        "#" + Integer.toHexString(
+//                            ContextCompat.getColor(context, R.color.absent)
+//                        )
+//                    )
+//                )
+//
+//            } else {
+//                holder.cardView.setCardBackgroundColor(
+//                    Color.parseColor(
+//                        "#" + Integer.toHexString(
+//                            ContextCompat.getColor(context, R.color.normal)
+//                        )
+//                    )
+//                )
+//
+//
+//            }
+//        }
+        holder.longPress
 
 
     }

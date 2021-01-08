@@ -1,8 +1,9 @@
 package com.pragati.communeapp.model
 
 data class StudentItem (
-    var roll : String,
+    var sid : Long,
+    var roll : Int,
     var name : String,
-    var status : String
+    var status : String = ""
 )
 

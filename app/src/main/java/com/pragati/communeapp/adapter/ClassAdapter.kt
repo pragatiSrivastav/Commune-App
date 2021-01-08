@@ -60,6 +60,8 @@ class ClassAdapter(
             val intent = Intent(holder.llContent.context,StudentActivity::class.java)
             intent.putExtra("Class",className)
             intent.putExtra("Subject",subName)
+            intent.putExtra("position", position);
+            intent.putExtra("cid", classItem.class_id);
             holder.llContent.context.startActivity(intent)
         }
 
