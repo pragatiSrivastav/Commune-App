@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import java.sql.SQLException
 
 
-class DbHelper(context: Context) : SQLiteOpenHelper(context,"Attendance.db",null,2) {
+class DbHelper(context: Context) : SQLiteOpenHelper(context,"Attendance.db",null,3) {
 
     //CLASS TABLE
     private val classTableName : String ="CLASS_TABLE"
@@ -48,17 +48,37 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context,"Attendance.db",null
     private val selectStudentTable : String = "SELECT * FROM $studentTableName"
 
 
+    //status table
+    private val statusTableName: String? = "STATUS_TABLE"
+    val statusId : String = "_STATUS_ID"
+    val dateKey : String = "STATUS_DATE"
+    val statusKey : String = "STATUS"
+
+    private val createStatusTable = "CREATE TABLE " + statusTableName +
+            "(" +
+            statusId + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+            sid + " INTEGER NOT NULL, " +
+            cid + " INTEGER NOT NULL, " +
+            dateKey + " DATE NOT NULL, " +
+            statusKey + " TEXT NOT NULL, " +
+            " UNIQUE (" + sid + "," + dateKey + ")," +
+            " FOREIGN KEY (" + sid + ") REFERENCES " + studentTableName + "( " + sid + ")," +
+            " FOREIGN KEY (" + cid  + ") REFERENCES " + classTableName + "( " + cid + ")" +
+            ");"
+    private val dropStatusTable = "DROP TABLE IF EXISTS $statusTableName"
+    private val selectStatusTable = "SELECT * FROM $statusTableName"
 
     override fun onCreate(db: SQLiteDatabase?) {
         db?.execSQL(createTable)
         db?.execSQL(createStdTable)
+        db?.execSQL(createStatusTable)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         try {
             db?.execSQL(dropClassTable)
             db?.execSQL(dropStudentTable)
-
+            db?.execSQL(dropStatusTable)
         }catch(e : SQLException){
             e.printStackTrace()
         }
@@ -120,5 +140,42 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context,"Attendance.db",null
         values.put(studentNameKey,studentName)
         return database.update(studentTableName,values,"$sid=?", arrayOf(sId.toString()))
     }
+
+    fun addStatus(sId : Long,cId: Long,date : String,status :String):Long{
+        var database : SQLiteDatabase = this.writableDatabase
+        var values = ContentValues()
+        values.put(sid,sId)
+        values.put(cid,cId)
+        values.put(dateKey,date)
+        values.put(statusKey,status)
+        return database.insert(statusTableName, null,values)
+    }
+
+    fun updateStatus(sId : Long ,date : String,status: String) : Int {
+        var database : SQLiteDatabase = this.writableDatabase
+        var values = ContentValues()
+        values.put(statusKey,status)
+        var whereClause : String = "$dateKey=' $date 'AND $sid=$sId"
+        return database.update(statusTableName,values,whereClause,null)
+    }
+
+    fun getStatus(sId : Long,date: String): String? {
+        var status : String? = null
+        var database : SQLiteDatabase = this.readableDatabase
+        var whereClause : String = "$dateKey=' $date 'AND $sid=$sId"
+        var cursor : Cursor = database.query(statusTableName,null,whereClause,null,null,null,null)
+        if(cursor.moveToFirst()){
+            status = cursor.getString(cursor.getColumnIndex(statusKey))
+        }
+        return status
+    }
+
+    fun getDistinctMonths(cId : Long) : Cursor{
+        var database : SQLiteDatabase = this.readableDatabase
+        return database.query(statusTableName, arrayOf(dateKey), "$cid=$cId",null,
+            "substr($dateKey ,4,7)",null,null)
+    }
+
+
 
 }

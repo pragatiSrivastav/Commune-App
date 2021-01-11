@@ -1,22 +1,26 @@
 package com.pragati.communeapp.activity
 
-import android.content.Context
+import android.app.DatePickerDialog
 import android.database.Cursor
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.pragati.communeapp.MyCalendar
 
 import com.pragati.communeapp.R
 import com.pragati.communeapp.adapter.StudentAdapter
 import com.pragati.communeapp.database.DbHelper
 import com.pragati.communeapp.model.StudentItem
+import java.text.SimpleDateFormat
+import java.util.*
 
 class StudentActivity : AppCompatActivity() {
 
@@ -30,21 +34,28 @@ class StudentActivity : AppCompatActivity() {
     lateinit var name : EditText
     var cid :Long = 0
     lateinit var dbHelper: DbHelper
+    private lateinit var subtitle: TextView
     var position : Int = 0
+    var format = SimpleDateFormat("dd MMM YYYY",Locale.US)
+    lateinit var date: String
+    private lateinit var calendar : MyCalendar
+
 
 
     private val studentItems = arrayListOf<StudentItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_student)
+        calendar = MyCalendar()
         dbHelper = DbHelper(this)
         className = intent.getStringExtra("Class")
         subjectName = intent.getStringExtra("Subject")
         position = intent.getIntExtra("position",-1)
         cid = intent.getLongExtra("cid",-1)
-
-
+        date = " "
         setToolbar()
         loadData()
 
@@ -52,11 +63,10 @@ class StudentActivity : AppCompatActivity() {
         recyclerView.setHasFixedSize(true)
         layoutManager = LinearLayoutManager(this)
         studentAdapter = StudentAdapter(this@StudentActivity, studentItems)
-
         recyclerView.adapter = studentAdapter
         recyclerView.layoutManager = layoutManager
 
-
+        loadStatusData()
     }
 
     private fun loadData(){
@@ -74,17 +84,25 @@ class StudentActivity : AppCompatActivity() {
         cursor.close()
     }
 
+
+
     private fun setToolbar() {
         toolbar = findViewById(R.id.toolbar)
         var title: TextView = findViewById(R.id.title_toolbar)
-        var subtitle: TextView = findViewById(R.id.subtitle_toolbar)
+        subtitle = findViewById(R.id.subtitle_toolbar)
         var back: ImageButton = findViewById(R.id.back)
         var save: ImageButton = findViewById(R.id.save)
 
+
         title.text = className
-        subtitle.text = subjectName
+        subtitle.text = "$subjectName | ${calendar.getDate()}"
+
         back.setOnClickListener {
             onBackPressed()
+        }
+
+        save.setOnClickListener {
+            saveStatus()
         }
         toolbar.inflateMenu(R.menu.student_menu)
 
@@ -97,7 +115,56 @@ class StudentActivity : AppCompatActivity() {
         if(menuItem.itemId== R.id.add_student){
             setDialog()
         }
+        if (menuItem.itemId==R.id.showCalendar){
+            showCalendar()
+        }
         return true
+    }
+
+    private fun saveStatus(){
+        studentItems.forEach { studentItem ->
+            var status : String = studentItem.status
+            if(status != "P") status = "A"
+//            val now = Calendar.getInstance()
+//            DatePickerDialog(this,DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+//                val selectedDate = Calendar.getInstance()
+//                selectedDate.set(Calendar.YEAR,year)
+//                selectedDate.set(Calendar.MONTH,month)
+//                selectedDate.set(Calendar.DAY_OF_MONTH,dayOfMonth)
+//                val date : String = format.format(selectedDate.time)
+//
+//            },
+//                now.get(Calendar.YEAR),now.get(Calendar.MONTH),now.get(Calendar.DAY_OF_MONTH))
+            val value : Long= dbHelper.addStatus(studentItem.sid,cid,calendar.getDate(),status)
+            if(value.equals(-1)){
+                dbHelper.updateClass(studentItem.sid,date,status)
+            }
+        }
+    }
+
+    private fun loadStatusData(){
+
+        studentItems.forEach { studentItem ->
+     //       val now = Calendar.getInstance()
+//            DatePickerDialog(this,DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+//                val selectedDate = Calendar.getInstance()
+//                selectedDate.set(Calendar.YEAR,year)
+//                selectedDate.set(Calendar.MONTH,month)
+//                selectedDate.set(Calendar.DAY_OF_MONTH,dayOfMonth)
+                //val date = format.format(selectedDate.time)
+            //},
+            //now.get(Calendar.YEAR),now.get(Calendar.MONTH),now.get(Calendar.DAY_OF_MONTH))
+
+            var status : String? = dbHelper.getStatus(studentItem.sid,calendar.getDate())
+                if(status!=null){
+                    studentItem.status = status
+                }else{
+                    studentItem.status=" "
+              }
+                studentAdapter.notifyDataSetChanged()
+
+        }
+
     }
     private fun setDialog(){
         val builder = AlertDialog.Builder(this)
@@ -122,6 +189,7 @@ class StudentActivity : AppCompatActivity() {
         }
         dialog.show()
     }
+
     private fun addStudent(){
 
         val rollNo : Int = roll.text.toString().toInt()
@@ -167,6 +235,7 @@ class StudentActivity : AppCompatActivity() {
 
 
         roll = view.findViewById(R.id.rollNo)
+        roll.isEnabled = false
         name = view.findViewById(R.id.nameOfStd)
 
 
@@ -179,12 +248,12 @@ class StudentActivity : AppCompatActivity() {
             dialog.dismiss()
         }
 
-        add.setOnClickListener{
-           // val rollNo : String = roll.text.toString()
-            val nameStd : String = name.text.toString()
-            updateClass(pos,nameStd)
+        add.setOnClickListener {
+            val nameStd: String = name.text.toString()
+            updateClass(pos, nameStd)
             dialog.dismiss()
         }
+
     }
 
 
@@ -193,6 +262,20 @@ class StudentActivity : AppCompatActivity() {
         studentItems[pos].name=nameStd
         studentAdapter.notifyItemChanged(pos)
     }
+
+
+    private fun showCalendar(){
+        var calendar= MyCalendar()
+        calendar.show(supportFragmentManager,"")
+        calendar.setOnCalendarOkClickListener(this :: onCalendarOkClicked)
+
+    }
+
+    private fun onCalendarOkClicked(view : View, year : Int, month : Int, dayOfMonth :Int){
+        calendar.setDate(year,month,dayOfMonth)
+        subtitle.text=calendar.getDate()
+    }
+
 
 }
 

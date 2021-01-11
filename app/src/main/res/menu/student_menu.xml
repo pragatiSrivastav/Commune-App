@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
     <item
         android:id="@+id/add_student"
-        android:title="ADD STUDENT"/>
+        android:title="ADD STUDENT"
+        android:icon="@drawable/ic_student"/>
+
+    <item
+        android:id="@+id/showCalendar"
+        android:title="CHANGE DATE"
+        android:icon="@drawable/ic_date"/>
+
 </menu>

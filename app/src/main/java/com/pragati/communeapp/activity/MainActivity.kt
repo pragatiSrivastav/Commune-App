@@ -90,8 +90,7 @@ class MainActivity : AppCompatActivity() {
                             R.id.frame,
                             TakeAttendanceFragment()
                         )
-                        .addToBackStack("Take Attendance")
-                        .commit()
+
                     supportActionBar?.title="Take Attendance"
                     drawerLayout.closeDrawers()
                    // Toast.makeText(this@MainActivity,"Take attendance is clicked",Toast.LENGTH_SHORT).show()
@@ -121,19 +120,16 @@ class MainActivity : AppCompatActivity() {
                   //  Toast.makeText(this@MainActivity,"Change password clicked",Toast.LENGTH_SHORT).show()
                 }
                 R.id.Logout -> {
-
-                    val intent = Intent(this@MainActivity,LoginActivity::class.java)
-                    startActivity(intent)
-//                    supportFragmentManager.beginTransaction()
-//                        .replace(
-//                            R.id.frame,
-//                            LogoutFragment()
-//                        )
-//                        .commit()
-//
-//                    supportActionBar?.title="Logout"
-//                    drawerLayout.closeDrawers()
-                   // Toast.makeText(this@MainActivity,"Logout is clicked",Toast.LENGTH_SHORT).show()
+                    supportFragmentManager.beginTransaction()
+                        .replace(
+                            R.id.frame,
+                            LogoutFragment()
+                        )
+                        .commit()
+                    // finish()
+                    supportActionBar?.title="Logout"
+                    drawerLayout.closeDrawers()
+                   //Toast.makeText(this@MainActivity,"Logout is clicked",Toast.LENGTH_SHORT).show()
                 }
             }
             return@setNavigationItemSelectedListener true

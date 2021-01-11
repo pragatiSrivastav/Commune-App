@@ -4,7 +4,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="8dp">
+    app:cardCornerRadius="8dp"
+    app:cardBackgroundColor="#C0EFEF">
 <LinearLayout
     android:padding="16dp"
     android:orientation="vertical"

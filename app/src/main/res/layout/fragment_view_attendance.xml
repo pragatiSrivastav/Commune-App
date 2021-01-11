@@ -3,16 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".fragment.ViewAttendanceFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/txtViewAtten"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="View Attendance"
-        android:padding="10dp"
-        android:textSize="20dp"
-        />
+<!--    <include-->
+<!--        layout="@layout/toolbar"/>-->
 
+    <ListView
+        android:id="@+id/sheetList"
+        android:layout_marginTop="70dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@android:color/transparent"/>
 </RelativeLayout>

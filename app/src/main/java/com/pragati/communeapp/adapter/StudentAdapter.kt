@@ -44,6 +44,7 @@ class StudentAdapter(val context: Context, val itemList: ArrayList<StudentItem>)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudentViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.student_item,parent,false)
+
         return StudentViewHolder(view)
     }
 
@@ -58,53 +59,47 @@ class StudentAdapter(val context: Context, val itemList: ArrayList<StudentItem>)
         holder.nameOfStd.text=studentItem.name
         holder.status.text = studentItem.status
         var status = holder.status.text
-//        holder.rrContent.setOnClickListener {
-//            if(status == "P"){
-//                status = "A"
-//            }
-//            else{
-//                status="P"
-//            }
-//            studentItem.status= status.toString()
-//            notifyDataSetChanged()
-//
-//            if (status == "P") {
-//                holder.cardView.setCardBackgroundColor(
-//                    Color.parseColor(
-//                        "#" + Integer.toHexString(
-//                            ContextCompat.getColor(context, R.color.present)
-//                        )
-//                    )
-//                )
-//            } else if (status == "A") {
-//                holder.cardView.setCardBackgroundColor(
-//                    Color.parseColor(
-//                        "#" + Integer.toHexString(
-//                            ContextCompat.getColor(context, R.color.absent)
-//                        )
-//                    )
-//                )
-//
-//            } else {
-//                holder.cardView.setCardBackgroundColor(
-//                    Color.parseColor(
-//                        "#" + Integer.toHexString(
-//                            ContextCompat.getColor(context, R.color.normal)
-//                        )
-//                    )
-//                )
-//
-//
-//            }
-//        }
+        holder.rrContent.setOnClickListener {
+            if(status == "P"){
+                status = "A"
+            }
+            else{
+                status="P"
+            }
+            studentItem.status= status.toString()
+            //holder.longPress
+            notifyDataSetChanged()
+
+            if (status == "P") {
+                holder.cardView.setCardBackgroundColor(
+                    Color.parseColor(
+                        "#" + Integer.toHexString(
+                            ContextCompat.getColor(context, R.color.present)
+                        )
+                    )
+                )
+            } else if (status == "A") {
+                holder.cardView.setCardBackgroundColor(
+                    Color.parseColor(
+                        "#" + Integer.toHexString(
+                            ContextCompat.getColor(context, R.color.absent)
+                        )
+                    )
+                )
+
+            } else {
+                holder.cardView.setCardBackgroundColor(
+                    Color.parseColor(
+                        "#" + Integer.toHexString(
+                            ContextCompat.getColor(context, R.color.normal)
+                        )
+                    )
+                )
+            }
+
+       }
         holder.longPress
-
-
     }
-
-
-
-
 
 }
 

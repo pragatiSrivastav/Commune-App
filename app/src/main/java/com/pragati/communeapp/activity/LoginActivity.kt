@@ -31,7 +31,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         auth = FirebaseAuth.getInstance()
-
+        
         //Hooks
         btnSignUp = findViewById(R.id.btnSignUp)
         btnLogin = findViewById(R.id.btnLogin)

@@ -3,16 +3,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.DashboardFragment">
+    tools:context=".fragment.DashboardFragment"
+    android:padding="8dp"
+    android:background="@drawable/night">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:id="@+id/txtDashboard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Dashboard"
+        android:text="We are currently in developing mode."
         android:padding="10dp"
-        android:textSize="20dp"
+        android:textColor="#FFFFFF"
+        android:textSize="28sp"
+        android:fontFamily="@font/bungee"
+        android:layout_marginTop="20dp"
         />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Thanks for visiting..."
+        android:layout_below="@id/txtDashboard"
+        android:textSize="20sp"
+        android:textStyle="italic"
+        android:textColor="#ffffff"
+        android:layout_centerHorizontal="true"/>
+
+
+
+
 
 </RelativeLayout>

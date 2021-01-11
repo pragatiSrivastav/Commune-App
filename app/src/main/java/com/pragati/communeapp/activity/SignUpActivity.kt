@@ -86,7 +86,7 @@ class SignUpActivity : AppCompatActivity() {
 
                 } else {
                     // If sign in fails, display a message to the user.
-                    Toast.makeText(baseContext, "SignUpActivity failed. Try again after sometime",
+                    Toast.makeText(baseContext, "SignUp failed. Try again after sometime",
                         Toast.LENGTH_SHORT).show()
                 }
 
@@ -94,4 +94,5 @@ class SignUpActivity : AppCompatActivity() {
             }
 
     }
+    
 }
