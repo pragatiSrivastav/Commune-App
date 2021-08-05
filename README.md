@@ -1,3 +1,5 @@
 # Commune-App
 An app for College purpose.
-[SCREENSHOTS.pdf](https://github.com/Pragati7979/Commune-App/files/6940614/SCREENSHOTS.pdf)
+
+![screenshot](https://user-images.githubusercontent.com/65192638/128397641-aaa9170a-696a-4e78-ba38-2f7d8426e14f.jpg)
+
